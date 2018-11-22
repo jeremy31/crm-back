@@ -39,16 +39,6 @@ class Recipe
     private $active;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateAdd;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\RecipeProduct", mappedBy="recipe", orphanRemoval=true)
      * @ORM\OrderBy({"quantity" = "DESC"})
      */
@@ -144,30 +134,6 @@ class Recipe
     public function setActive(bool $active): self
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function getDateAdd(): ?\DateTimeInterface
-    {
-        return $this->dateAdd;
-    }
-
-    public function setDateAdd(\DateTimeInterface $dateAdd): self
-    {
-        $this->dateAdd = $dateAdd;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }
