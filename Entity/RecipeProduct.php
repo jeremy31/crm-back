@@ -74,20 +74,31 @@ class RecipeProduct
         return $this;
     }
 
-    public function getQuantityByRecipe(): ?float
+    public function getQuantityByRecipe($weight = null): ?float
     {
+		if(!$weight)
+			$weightRecipe = $this->getRecipe()->getWeight();
+	
         if($this->getProduct()->getUnity() == 'quantity')
             $quantityProductByRecipe = $this->getQuantity();
         else
-            $quantityProductByRecipe = ($this->getRecipe()->getWeight() * $this->getQuantity()) / $this->getRecipe()->getWeightRecipe();
+            $quantityProductByRecipe = ($weight * $this->getQuantity()) / $this->getRecipe()->getWeightRecipe();
 
         return $quantityProductByRecipe;
     }
 
-    public function getPriceByRecipe(): ?float
+    public function getPercentByRecipe(): ?float
     {
-        $priceByRecipe = $this->getProduct()->getPriceTi() / $this->getProduct()->getWeightQuantity() * $this->getQuantityByRecipe();
+        if($this->getProduct()->getUnity() == 'weight')
+            $percentProductByRecipe = (100 * $this->getQuantity()) / $this->getRecipe()->getWeightRecipe();
 
+        return $percentProductByRecipe;
+    }
+
+    public function getPriceByRecipe($weight = null): ?float
+    {
+        $priceByRecipe = $this->getProduct()->getPriceTi() / $this->getProduct()->getWeightQuantity() * $this->getQuantityByRecipe($weight);
+		
         return $priceByRecipe;
     }
 }

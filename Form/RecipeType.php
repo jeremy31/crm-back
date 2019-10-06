@@ -12,15 +12,21 @@ class RecipeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('price')
-            ->add('weight')
-            ->add('stock')
-            ->add('prestashop')
-            ->add('brewTemp')
-            ->add('brewTime')
-            ->add('description', null, array('attr' => array('rows' => '10','cols' => '50')))
-            ->add('active')
+            ->add('name', null, array('label' => 'Nom'))
+            ->add('title', null, array('label' => 'Titre'))
+            ->add('price', null, array('label' => 'Prix'))
+            ->add('price20', null, array('label' => 'Prix 20g'))
+            ->add('price150', null, array('label' => 'Prix 150g'))
+            ->add('stock', null, array('label' => 'Stock'))
+            ->add('stock20', null, array('label' => 'Stock 20g'))
+            ->add('stock45', null, array('label' => 'Stock 45g'))
+            ->add('stock150', null, array('label' => 'Stock 150g'))
+            ->add('weight', null, array('label' => 'Poids'))
+            ->add('prestashop', null, array('label' => 'ID Prestashop'))
+            ->add('brewTime', null, array('label' => 'Temps d\'infusion'))
+            ->add('brewTemp', null, array('label' => 'Degré d\'infusion'))
+            ->add('description', null, array('label' => 'Description', 'attr' => array('rows' => '10','cols' => '50')))
+            ->add('active', null, array('label' => 'En ligne'))
         ;
     }
 

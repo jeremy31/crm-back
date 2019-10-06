@@ -54,16 +54,6 @@ class ProductDeclension
     private $active;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateAdd;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="declension")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -169,30 +159,6 @@ class ProductDeclension
     public function setActive(bool $active): self
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function getDateAdd(): ?\DateTimeInterface
-    {
-        return $this->dateAdd;
-    }
-
-    public function setDateAdd(\DateTimeInterface $dateAdd): self
-    {
-        $this->dateAdd = $dateAdd;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }

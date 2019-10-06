@@ -37,7 +37,7 @@ class RecipeProductController extends AbstractController
             $em->persist($recipeProduct);
             $em->flush();
 
-            return $this->redirectToRoute('recipe_product_index');
+            return $this->redirectToRoute('recipe_index');
         }
 
         return $this->render('recipe_product/new.html.twig', [

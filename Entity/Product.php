@@ -24,16 +24,6 @@ class Product
     private $name;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateAdd;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductDeclension", mappedBy="product", orphanRemoval=true)
      */
     private $declensions;
@@ -75,30 +65,6 @@ class Product
         return $this;
     }
 
-    public function getDateAdd(): ?\DateTimeInterface
-    {
-        return $this->dateAdd;
-    }
-
-    public function setDateAdd(\DateTimeInterface $dateAdd): self
-    {
-        $this->dateAdd = $dateAdd;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
-
-        return $this;
-    }
-
     /**
      * @return Collection|ProductDeclension[]
      */
@@ -111,7 +77,7 @@ class Product
     {
         if (!$this->declensions->contains($declension)) {
             $this->declensions[] = $declension;
-            $declension->setProduct($this);
+            $declension->setProduct($this, 'test');
         }
 
         return $this;

@@ -12,16 +12,14 @@ class ProductDeclensionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('product')
             ->add('reference')
             ->add('priceTe')
             ->add('priceTi')
             ->add('tax')
-            ->add('weightQuantity')
             ->add('unity')
+            ->add('weightQuantity')
             ->add('active')
-            ->add('dateAdd')
-            ->add('dateUpdate')
-            ->add('product')
         ;
     }
 

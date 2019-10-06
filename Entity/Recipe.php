@@ -74,6 +74,36 @@ class Recipe
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price20;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price150;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $stock20;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $stock45;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $stock150;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -102,9 +132,34 @@ class Recipe
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice($weight = null): ?float
     {
-        return $this->price;
+		if($weight == 20)
+		{
+			$price = $this->price20;
+		}
+		elseif($weight == 45)
+		{
+			$price = $this->price;
+		}
+		elseif($weight == 150)
+		{
+			$price = $this->price150;
+		}
+		else
+			$price = $this->price;
+		
+        return $price;
+    }
+
+    public function getPrice20(): ?float
+    {		
+        return $this->price20;
+    }
+
+    public function getPrice150(): ?float
+    {		
+        return $this->price150;
     }
 
     public function setPrice(float $price): self
@@ -217,9 +272,24 @@ class Recipe
         return $this;
     }
 
-    public function getStock(): ?int
+    public function getStock($weight = null): ?int
     {
-        return $this->stock;
+		if($weight == 20)
+		{
+			$stock = $this->stock20;
+		}
+		elseif($weight == 45)
+		{
+			$stock = $this->stock45;
+		}
+		elseif($weight == 150)
+		{
+			$stock = $this->stock150;
+		}
+		else
+			$stock = $this->stock;
+		
+        return $stock;
     }
 
     public function setStock(int $stock): self
@@ -241,44 +311,46 @@ class Recipe
         return $weightRecipe;
     }
 
-    public function getPriceOrder(): ?float
+    public function getPriceOrder($weight = null): ?float
     {
         $priceOrder = 0;
         
         foreach ($this->getProducts() as $product) {
-            $priceOrder += $product->getPriceByRecipe();
+            $priceOrder += $product->getPriceByRecipe($weight);
         }
+		
+		$priceOrder = $priceOrder + self::getPackagingPrice($weight);
 
         return $priceOrder;
     }
 
-    public function getPriceProposed(): ?float
+    public function getPriceProposed($weight = null): ?float
     {
-        $priceProposed = $this->getPriceOrder() * 3;
+        $priceProposed = $this->getPriceOrder($weight) * 3;
 
         return $priceProposed;
     }
 
-    public function getMarginCoefficient(): ?float
+    public function getMarginCoefficient($weight = null): ?float
     {
-        if(!$this->getPriceOrder())
+        if(!$this->getPriceOrder($weight))
             return 0;
         
-        $marginCoefficient = $this->getPrice() / $this->getPriceOrder();
+        $marginCoefficient = $this->getPrice($weight) / $this->getPriceOrder($weight);
 
         return $marginCoefficient;
     }
 
-    public function getMargin(): ?float
+    public function getMargin($weight = null): ?float
     {
-        $margin = $this->getPrice() - $this->getPriceOrder();
+        $margin = $this->getPrice($weight) - $this->getPriceOrder($weight);
 
         return $margin;
     }
 
-    public function getValorization(): ?float
+    public function getValorization($weight = null): ?float
     {
-        return $this->stock * $this->getPrice();
+        return $this->getStock($weight) * $this->getPrice($weight);
     }
 
     public function getPrimary(): ?RecipeProduct
@@ -345,6 +417,124 @@ class Recipe
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPriceByWeight($weight = null): ?float
+    {
+		if(!$weight)
+			$realWeight = $this->getWeight();
+		else
+			$realWeight = $weight;
+		
+		if(!$realWeight)
+			return 0;
+		
+		$priceByWeight = ($this->getPrice($weight) / $realWeight) * 1000;
+
+        return $priceByWeight;
+    }
+
+    public function getPriceByWeightInit(): ?float
+    {
+		if($this->getWeight())
+			return $this->getPriceByWeight($this->getWeight());
+
+        return 0;
+    }
+
+    public function setPrice20(float $price20): self
+    {
+        $this->price20 = $price20;
+
+        return $this;
+    }
+
+    public function setPrice150(float $price150): self
+    {
+        $this->price150 = $price150;
+
+        return $this;
+    }
+	
+	public static function getPackagingPrice($weight): ?float
+         	{
+         		$packagingPrice = 0;
+         		
+         		if($weight == 20)
+         		{
+         			$boite = 13.99 / 24;
+         			$etiquettes = 0.2;
+         			$packagingPrice = $boite + $etiquettes;
+         		}
+         		elseif($weight == 45)
+         		{
+         			$boite = 22.56 / 24;
+         			$etiquettes = 0.25;
+         			$packagingPrice = $boite + $etiquettes;
+         		}
+         		elseif($weight == 70)
+         		{
+         			$sachet = 95.08 / 1000;
+         			$tirette = 10.59 / 1000;
+         			$etiquettes = 0.25;
+         			$packagingPrice = $sachet + $tirette + $etiquettes;
+         		}
+         		elseif($weight == 150)
+         		{
+         			$boite = 21.41 / 12;
+         			$etiquettes = 0.35;
+         			$packagingPrice = $boite + $etiquettes;
+         		}
+         		
+         		return $packagingPrice;
+         	}
+
+    public function getStock20(): ?int
+    {
+        return $this->stock20;
+    }
+
+    public function setStock20(int $stock20): self
+    {
+        $this->stock20 = $stock20;
+
+        return $this;
+    }
+
+    public function getStock45(): ?int
+    {
+        return $this->stock45;
+    }
+
+    public function setStock45(int $stock45): self
+    {
+        $this->stock45 = $stock45;
+
+        return $this;
+    }
+
+    public function getStock150(): ?int
+    {
+        return $this->stock150;
+    }
+
+    public function setStock150(int $stock150): self
+    {
+        $this->stock150 = $stock150;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

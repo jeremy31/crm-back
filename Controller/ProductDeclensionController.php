@@ -37,7 +37,7 @@ class ProductDeclensionController extends AbstractController
             $em->persist($productDeclension);
             $em->flush();
 
-            return $this->redirectToRoute('product_declension_index');
+            return $this->redirectToRoute('product_index');
         }
 
         return $this->render('product_declension/new.html.twig', [
